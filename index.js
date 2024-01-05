@@ -1,18 +1,9 @@
-//Importing express module
-const express = require('express')
-//Importing MongoDB CLIENT
-// const {MongoClient, ServerApiVersion} = require('mongodb')
-// Importing Body parser
-var bodyParser = require('body-parser')
-// Importing Cross Origin Resource Sharing (CORS)
 const cors = require('cors')
-// Importing URI for mongodb from credentials. (Environment variables on vercel).
-const uri = require('./credentials.json').uri
+var bodyParser = require('body-parser')
+var express = require("express")
+var app = express()
 
 
-//Instantiating express
-const app = express()
-//Preparing the url encoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -26,23 +17,54 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 })
+//*** Data ***
+// - Lessons
+const lessons = require('./data/lessons.json')
+// - Templates
+const getTemplates = require('./dba')
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-// const client = new MongoClient(uri, {
-//     serverApi: {
-//         version: ServerApiVersion.v1,
-//         strict: true,
-//         deprecationErrors: true,
-//     }
-// });
-//DEVELOPMENT ONLY
-//Listening to a port
+
+//LESSONS ENDPOINT
+app.get("/api/", async function (req, res) {
+    try{
+    const topics = await getTemplates()
+    res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+    console.log("lesosns endpoint\n")
+    topics.forEach(t => {t.topics.forEach(d => {console.log(d)})})
+    res.send(topics)
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).send("Internal Server Error");
+    }
+})
+
+//TEMPLATES ENDPOINT
+app.get("/api/templates", function (req, res) {
+    res.send(templates)
+    console.log("params:", req.params, Date.now())
+    console.log(req.query)
+})
+
+//GET REQUESTS
+app.post("/api/student", urlencodedParser, function (req, res, next) {
+    var result = {}
+    result = req.body    
+    console.log(result)
+    res.send({ message: "Heart" })
+    next()
+})
+
 app.listen(5000, function () {
     console.log("Listening on 5000")
 })
 
+module.exports = app
 
-// GET requests
-app.get('api/v1/orders', (req, res) =>{
-    res.send({Orders:"huevos"})
+//Pizza side
+
+app.get("/api/msk/orders", (req, res) =>{
+    
+    res.send("ORDERS API")
 })
+
