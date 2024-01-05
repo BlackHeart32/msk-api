@@ -34,5 +34,5 @@ const client = new MongoClient(uri, {
 //PRODUCTION
 app.get('api/v1/orders', (req, res) =>{
     // const orders = 
-    res.send("Orders")
+    res.send({Orders:"huevos"})
 })
