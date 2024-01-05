@@ -1,7 +1,7 @@
 //Importing express module
 const express = require('express')
 //Importing MongoDB CLIENT
-const {MongoClient, ServerApiVersion} = require('mongodb')
+// const {MongoClient, ServerApiVersion} = require('mongodb')
 // Importing Body parser
 var bodyParser = require('body-parser')
 // Importing Cross Origin Resource Sharing (CORS)
