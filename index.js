@@ -2,12 +2,20 @@
 const express = require('express')
 //Importing MongoDB CLIENT
 const {MongoClient, ServerApiVersion} = require('mongodb')
+// Importing Body parser
+var bodyParser = require('body-parser')
+// Importing Cross Origin Resource Sharing (CORS)
+const cors = require('cors')
+// Importing URI for mongodb from credentials. (Environment variables on vercel).
+const uri = require('./credentials.json').uri
 
-// ConnectionURI
 
 //Instantiating express
 const app = express()
-
+//Preparing the url encoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 //CORS!!!!
 // app.use(cors("http://localhost:3000"))
@@ -29,10 +37,12 @@ const client = new MongoClient(uri, {
 });
 //DEVELOPMENT ONLY
 //Listening to a port
+app.listen(5000, function () {
+    console.log("Listening on 5000")
+})
 
 
-//PRODUCTION
+// GET requests
 app.get('api/v1/orders', (req, res) =>{
-    // const orders = 
     res.send({Orders:"huevos"})
 })
